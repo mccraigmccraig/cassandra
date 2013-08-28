@@ -59,10 +59,10 @@
     <property name="test.unit.src" value="${test.dir}/unit"/>
     <property name="test.long.src" value="${test.dir}/long"/>
     <property name="dist.dir" value="${build.dir}/dist"/>
-	
+
 	<property name="source.version" value="1.6"/>
 	<property name="target.version" value="1.6"/>
-	
+
     <condition property="version" value="${base.version}">
       <isset property="release"/>
     </condition>
@@ -70,7 +70,7 @@
     <property name="version.properties.dir"
               value="${build.classes.main}/org/apache/cassandra/config/" />
     <property name="final.name" value="${ant.project.name}-${version}"/>
- 
+
     <!-- details of what version of Maven ANT Tasks to fetch -->
     <property name="maven-ant-tasks.version" value="2.1.3" />
     <property name="maven-ant-tasks.local" value="${user.home}/.m2/repository/org/apache/maven/maven-ant-tasks"/>
@@ -205,7 +205,7 @@
                 srcfile="${build.src.java}/org/apache/cassandra/cql3/Cql.g"
                 targetfile="${build.src.gen-java}/org/apache/cassandra/cql3/Cql.tokens"/>
     </target>
- 
+
     <target name="gen-cql2-grammar" depends="check-gen-cql2-grammar" unless="cql2current">
       <echo>Building Grammar ${build.src.java}/org/apache/cassandra/cql/Cql.g  ...</echo>
       <java classname="org.antlr.Tool"
@@ -323,7 +323,7 @@
             description="Define dependencies and dependency versions">
       <!-- The parent pom defines the versions of all dependencies -->
       <artifact:pom id="parent-pom"
-                    groupId="org.apache.cassandra"
+                    groupId="mccraigmccraig"
                     artifactId="cassandra-parent"
                     packaging="pom"
                     version="${version}"
@@ -360,7 +360,7 @@
             <exclusion groupId="com.thoughtworks.paranamer" artifactId="paranamer-ant"/>
             <exclusion groupId="org.apache.velocity" artifactId="velocity"/>
           </dependency>
-          
+
           <dependency groupId="org.apache.thrift" artifactId="libthrift" version="0.7.0"/>
 
           <dependency groupId="com.thoughtworks.paranamer" artifactId="paranamer-ant" version="2.1"/>
@@ -381,8 +381,8 @@
           <dependency groupId="org.jclouds.provider" artifactId="aws-s3" version="1.0-beta-9b" />
 
           <dependency groupId="log4j" artifactId="log4j" version="1.2.16" />
-          <dependency groupId="org.apache.cassandra" artifactId="cassandra-all" version="${version}" />
-          <dependency groupId="org.apache.cassandra" artifactId="cassandra-thrift" version="${version}" />
+          <dependency groupId="mccraigmccraig" artifactId="cassandra-all" version="${version}" />
+          <dependency groupId="mccraigmccraig" artifactId="cassandra-thrift" version="${version}" />
           <dependency groupId="com.yammer.metrics" artifactId="metrics-core" version="2.0.3" />
           <dependency groupId="edu.stanford.ppl" artifactId="snaptree" version="0.1" />
           <dependency groupId="org.mindrot" artifactId="jbcrypt" version="0.3m" />
@@ -407,7 +407,7 @@
       <!-- each dependency set then defines the subset of the dependencies for that dependency set -->
       <artifact:pom id="build-deps-pom"
                     artifactId="cassandra-build-deps">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <!-- FIXME: paranamer can be dropped after we're depending on avro
@@ -425,7 +425,7 @@
 
       <artifact:pom id="coverage-deps-pom"
                     artifactId="cassandra-coverage-deps">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <dependency groupId="net.sourceforge.cobertura" artifactId="cobertura"/>
@@ -433,7 +433,7 @@
 
       <artifact:pom id="test-deps-pom"
                     artifactId="cassandra-test-deps">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <dependency groupId="org.apache.whirr" artifactId="whirr-core"/>
@@ -444,10 +444,12 @@
       <!-- now the pom's for artifacts being deployed to Maven Central -->
 
       <artifact:pom id="all-pom"
+                    groupId="mccraigmccraig"
                     artifactId="cassandra-all"
                     url="http://cassandra.apache.org"
-                    name="Apache Cassandra">
-        <parent groupId="org.apache.cassandra"
+                    name="Apache Cassandra"
+                    version="${version}">
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <scm connection="${scm.connection}" developerConnection="${scm.developerConnection}" url="${scm.url}"/>
@@ -471,21 +473,21 @@
         <dependency groupId="edu.stanford.ppl" artifactId="snaptree"/>
         <dependency groupId="org.mindrot" artifactId="jbcrypt"/>
         <dependency groupId="com.yammer.metrics" artifactId="metrics-core"/>
-        
+
         <dependency groupId="log4j" artifactId="log4j"/>
         <!-- cassandra has a hard dependency on log4j, so force slf4j's log4j provider at runtime -->
         <dependency groupId="org.slf4j" artifactId="slf4j-log4j12" scope="runtime"/>
 
         <dependency groupId="org.apache.thrift" artifactId="libthrift"/>
-        <dependency groupId="org.apache.cassandra" artifactId="cassandra-thrift"/>
-        
+        <dependency groupId="mccraigmccraig" artifactId="cassandra-thrift"/>
+
         <!-- don't need hadoop classes to run, but if you use the hadoop stuff -->
         <dependency groupId="org.apache.hadoop" artifactId="hadoop-core" optional="true"/>
         <dependency groupId="org.apache.pig" artifactId="pig" optional="true"/>
 
         <!-- don't need jna to run, but nice to have -->
         <dependency groupId="net.java.dev.jna" artifactId="jna" optional="true"/>
-        
+
         <!-- don't need jamm unless running a server in which case it needs to be a -javagent to be used anyway -->
         <dependency groupId="com.github.stephenc" artifactId="jamm"/>
         <dependency groupId="io.netty" artifactId="netty"/>
@@ -494,7 +496,7 @@
                     artifactId="cassandra-thrift"
                     url="http://cassandra.apache.org"
                     name="Apache Cassandra">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <scm connection="${scm.connection}" developerConnection="${scm.developerConnection}" url="${scm.url}"/>
@@ -506,19 +508,19 @@
                     artifactId="cassandra-clientutil"
                     url="http://cassandra.apache.org"
                     name="Apache Cassandra">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <scm connection="${scm.connection}" developerConnection="${scm.developerConnection}" url="${scm.url}"/>
   <dependency groupId="com.google.guava" artifactId="guava"/>
       </artifact:pom>
-      
+
       <artifact:pom id="dist-pom"
                     artifactId="apache-cassandra"
                     packaging="pom"
                     url="http://cassandra.apache.org"
                     name="Apache Cassandra">
-        <parent groupId="org.apache.cassandra"
+        <parent groupId="mccraigmccraig"
                 artifactId="cassandra-parent"
                 version="${version}"/>
         <scm connection="${scm.connection}" developerConnection="${scm.developerConnection}" url="${scm.url}"/>
@@ -527,9 +529,9 @@
 
     <target name="maven-ant-tasks-retrieve-build" depends="maven-declare-dependencies">
       <artifact:dependencies pomRefId="build-deps-pom"
-                             filesetId="build-dependency-jars" 
-                             sourcesFilesetId="build-dependency-sources" 
-                             cacheDependencyRefs="true" 
+                             filesetId="build-dependency-jars"
+                             sourcesFilesetId="build-dependency-sources"
+                             cacheDependencyRefs="true"
                              dependencyRefsBuildFile="${build.dir}/build-dependencies.xml">
           <remoteRepository refid="central"/>
           <remoteRepository refid="apache"/>
@@ -553,8 +555,8 @@
     <target name="maven-ant-tasks-retrieve-test" depends="maven-ant-tasks-init">
       <artifact:dependencies pomRefId="test-deps-pom"
                              filesetId="test-dependency-jars"
-                             sourcesFilesetId="test-dependency-sources" 
-                             cacheDependencyRefs="true" 
+                             sourcesFilesetId="test-dependency-sources"
+                             cacheDependencyRefs="true"
                              dependencyRefsBuildFile="${build.dir}/test-dependencies.xml">
         <remoteRepository refid="apache"/>
         <remoteRepository refid="central"/>
@@ -585,7 +587,7 @@
     <target name="avro-generate"
             depends="avro-interface-generate-internode"
             description="Generates Java Avro classes for client and internal use." />
-    
+
     <target name="avro-interface-generate-internode" unless="avroINProtoUpToDate"
             depends="init,check-avro-generate,maven-ant-tasks-retrieve-build">
       <avromacro protocolname="internode" inputfile="${avro.src}/internode.genavro"
@@ -662,7 +664,7 @@
             description="Run in test mode.  Not for production use!">
       <java classname="org.apache.cassandra.service.CassandraDaemon" fork="true">
         <classpath>
-          <path refid="cassandra.classpath"/>  
+          <path refid="cassandra.classpath"/>
           <pathelement location="${test.conf}"/>
         </classpath>
         <jvmarg value="-Dstorage-config=${test.conf}"/>
@@ -747,7 +749,7 @@
       <artifact:writepom pomRefId="parent-pom" file="${build.dir}/${final.name}-parent.pom"/>
 
       <!-- Thrift Jar -->
-      <artifact:writepom pomRefId="thrift-pom" 
+      <artifact:writepom pomRefId="thrift-pom"
               file="${build.dir}/${ant.project.name}-thrift-${version}.pom"/>
       <jar jarfile="${build.dir}/${ant.project.name}-thrift-${version}.jar"
            basedir="${build.classes.thrift}">
@@ -763,7 +765,7 @@
       </jar>
 
       <!-- Main Jar -->
-      <artifact:writepom pomRefId="all-pom" 
+      <artifact:writepom pomRefId="all-pom"
               file="${build.dir}/${final.name}.pom"/>
       <jar jarfile="${build.dir}/${final.name}.jar"
            basedir="${build.classes.main}">
@@ -850,7 +852,7 @@
       </create-javadoc>
       <jar jarfile="${build.dir}/${ant.project.name}-clientutil-${version}-javadoc.jar"
            basedir="${javadoc.jars.dir}/clientutil"/>
-      <!-- javadoc task always rebuilds so might as well remove the generated docs to prevent 
+      <!-- javadoc task always rebuilds so might as well remove the generated docs to prevent
            being pulled into the distribution by accident -->
       <delete quiet="true" dir="${javadoc.jars.dir}"/>
     </target>
@@ -927,7 +929,7 @@
             <include name="*.jar" />
         </fileset>
       </copy>
-      <artifact:writepom pomRefId="dist-pom" 
+      <artifact:writepom pomRefId="dist-pom"
             file="${build.dir}/${final.name}-dist.pom"/>
       <tar compression="gzip" longfile="gnu"
         destfile="${build.dir}/${final.name}-bin.tar.gz">
@@ -1022,7 +1024,7 @@
      debuglevel="${debuglevel}"
      destdir="${test.classes}"
      includeantruntime="false"
-     source="${source.version}" 
+     source="${source.version}"
      target="${target.version}">
       <classpath>
         <path refid="cassandra.classpath"/>
@@ -1112,7 +1114,7 @@
       <jvmarg value="-Dcassandra.ring_delay_ms=1000"/>
     </testmacro>
   </target>
-    
+
   <target name="test-compression" depends="build-test" description="Execute unit tests with sstable compression enabled">
     <testmacro suitename="unit" inputdir="${test.unit.src}" timeout="60000">
       <jvmarg value="-Dlegacy-sstable-root=${test.data}/legacy-sstables"/>
@@ -1123,26 +1125,26 @@
   </target>
 
   <target name="msg-ser-gen-test" depends="build-test" description="Generates message serializations">
-    <testmacro suitename="unit" inputdir="${test.unit.src}" 
+    <testmacro suitename="unit" inputdir="${test.unit.src}"
                timeout="60000" filter="**/SerializationsTest.java">
       <jvmarg value="-Dcassandra.test-serialization-writes=True"/>
     </testmacro>
   </target>
-  
+
   <target name="msg-ser-test" depends="build-test" description="Tests message serializations">
     <testmacro suitename="unit" inputdir="${test.unit.src}" timeout="60000"
                filter="**/SerializationsTest.java"/>
   </target>
-  
+
   <target name="msg-ser-test-7" depends="build-test" description="Generates message serializations">
-    <testmacro suitename="unit" inputdir="${test.unit.src}" 
+    <testmacro suitename="unit" inputdir="${test.unit.src}"
                timeout="60000" filter="**/SerializationsTest.java">
       <jvmarg value="-Dcassandra.version=0.7"/>
     </testmacro>
   </target>
 
   <target name="msg-ser-test-10" depends="build-test" description="Tests message serializations on 1.0 messages">
-    <testmacro suitename="unit" inputdir="${test.unit.src}" 
+    <testmacro suitename="unit" inputdir="${test.unit.src}"
                timeout="60000" filter="**/SerializationsTest.java">
       <jvmarg value="-Dcassandra.version=1.0"/>
     </testmacro>
@@ -1273,7 +1275,7 @@
   <classpathentry kind="lib" path="build/test/classes"/>
   <classpathentry kind="lib" path="test/conf"/>
 ]]>
-	</echo>	  
+	</echo>
   	<path id="eclipse-project-libs-path">
   	 <fileset dir="lib">
   	    <include name="**/*.jar" />
@@ -1286,19 +1288,19 @@
   	<script language="javascript"> <![CDATA[
   		importClass(java.io.File);
   		jars = project.getProperty("eclipse-project-libs").split(project.getProperty("path.separator"));
-  		
+
   		cp = "";
   	    for (i=0; i< jars.length; i++) {
   	       cp += ' <classpathentry kind="lib" path="'+jars[i]+'"/>\n';
   		}
-  		
+
   		cp += '</classpath>';
-  	    
+
   		echo = project.createTask("echo");
   	    echo.setMessage(cp);
   		echo.setFile(new File(".classpath"));
   		echo.setAppend(true);
-  	    echo.perform();	     
+  	    echo.perform();
   	]]> </script>
     <mkdir dir=".settings" />
   </target>
@@ -1321,7 +1323,7 @@
   <target name="mvn-install"
           depends="maven-declare-dependencies,artifacts,jar,sources-jar,javadoc-jar"
           description="Installs the artifacts in the Maven Local Repository">
-          
+
     <!-- the parent -->
     <install pomFile="${build.dir}/${final.name}-parent.pom"
              file="${build.dir}/${final.name}-parent.pom"
@@ -1339,8 +1341,8 @@
              file="${build.dir}/${final.name}-src.tar.gz"
              packaging="tar.gz"
              classifier="src"/>
-          
-    <!-- the cassandra-thrift jar -->  
+
+    <!-- the cassandra-thrift jar -->
     <install pomFile="${build.dir}/${ant.project.name}-thrift-${version}.pom"
              file="${build.dir}/${ant.project.name}-thrift-${version}.jar"/>
     <install pomFile="${build.dir}/${ant.project.name}-thrift-${version}.pom"
@@ -1350,7 +1352,7 @@
              file="${build.dir}/${ant.project.name}-thrift-${version}-javadoc.jar"
              classifier="javadoc"/>
 
-    <!-- the cassandra-clientutil jar -->  
+    <!-- the cassandra-clientutil jar -->
     <install pomFile="${build.dir}/${ant.project.name}-clientutil-${version}.pom"
              file="${build.dir}/${ant.project.name}-clientutil-${version}.jar"/>
     <install pomFile="${build.dir}/${ant.project.name}-clientutil-${version}.pom"
@@ -1375,7 +1377,7 @@
           depends="mvn-install"
           if="release"
           description="Publishes the artifacts to the Maven repository">
-          
+
     <!-- the parent -->
     <deploy pomFile="${build.dir}/${final.name}-parent.pom"
             file="${build.dir}/${final.name}-parent.pom"
@@ -1393,8 +1395,8 @@
             file="${build.dir}/${final.name}-src.tar.gz"
             packaging="tar.gz"
             classifier="src"/>
-          
-    <!-- the cassandra-thrift jar -->  
+
+    <!-- the cassandra-thrift jar -->
     <deploy pomFile="${build.dir}/${ant.project.name}-thrift-${version}.pom"
             file="${build.dir}/${ant.project.name}-thrift-${version}.jar"/>
     <deploy pomFile="${build.dir}/${ant.project.name}-thrift-${version}.pom"
@@ -1404,7 +1406,7 @@
             file="${build.dir}/${ant.project.name}-thrift-${version}-javadoc.jar"
             classifier="javadoc"/>
 
-    <!-- the cassandra-clientutil jar -->  
+    <!-- the cassandra-clientutil jar -->
     <deploy pomFile="${build.dir}/${ant.project.name}-clientutil-${version}.pom"
             file="${build.dir}/${ant.project.name}-clientutil-${version}.jar"/>
     <deploy pomFile="${build.dir}/${ant.project.name}-clientutil-${version}.pom"
